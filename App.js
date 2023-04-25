@@ -17,25 +17,26 @@ export default function App() {
   const [tarefa, setTarefa] = useState('');
 
 
-  const [list, setList] = useState([
-    {
-      key: '1',
-      item: 'Comprar pao'
-    },
-    {
-      key: '2',
-      item: 'Estudar React Native'
-    },
-    {
-      key: '3',
-      item: 'Correr'
-    }
-
-  ])
+  const [list, setList] = useState([])
 
 
   function handleAdd() {
-    alert(tarefa)
+    if (!tarefa) {
+      return;
+    }
+    const dados = {
+      key: Date.now(),
+      item: tarefa
+    }
+    setList(oldArray => [dados, ...oldArray])
+    setTarefa('')
+  }
+
+  function handleDelete(item) {
+    let filtroItem = list.filter((tarefa) => {
+      return (tarefa.item !== item)
+    })
+    setList(filtroItem)
   }
 
   return (
@@ -56,7 +57,7 @@ export default function App() {
 
       <FlatList data={list}
         keyExtractor={(item) => item.key}
-        renderItem={({ item }) => <Tarefa data={item} style={styles.itemTarefa} />}
+        renderItem={({ item }) => <Tarefa data={item} style={styles.itemTarefa} deleteItem={() => handleDelete(item.item)} />}
         style={styles.list}
       />
 
@@ -96,20 +97,20 @@ const styles = StyleSheet.create({
   buttonAdd: {
     width: '15%',
     height: 44,
-    backgroundColor: '#73f7ff',
+    backgroundColor: '#77dd77',
     marginLeft: 8,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
   },
   list: {
-    flex:1,
-    color:'#fff', 
-    padding:'4%',
-    paddingEnd:'4%',
+    flex: 1,
+    padding: '4%',
+    paddingEnd: '4%',
+    backgroundColor:"#b5b5b5"
 
-    
+
   },
-  
+
 
 })
